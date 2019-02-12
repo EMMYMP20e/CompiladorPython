@@ -6,7 +6,7 @@ class Lexico(object):
 	#message=[""]
 	def __init__(self):
 		self.source=""
-		self.id=0
+		self.id=-1
 		self.message=[""]
 	def set_source(self,source):
 		self.__source=source
@@ -22,175 +22,182 @@ class Lexico(object):
 		state=0
 		for c in self.__source:
 			if state==0:
-				if (c>=0 and c<=9):
+				if (c>='0' and c<='9'):
 					state=1
 				else:
 					state=7
 
 			elif state==1:
-				if (c<0 or c>9):
+				if (c<'0' or c>'9'):
 					state=6
-				elif c=='.':
+				if c=='.':
 					state=2
 
 			elif state==2:
-				if (c<0 or c>9):
+				if (c<'0' or c>'9'):
 					state=3
 				else:
 					state=4
 
 			elif state==4:
-				if (c<0 or c>9):
+				if (c<'0' or c>'9'):
 					state=5
-				elif (c=='.'):
+				if c=='.':
 					state=3
 			if (state==3 or state ==5 or state ==6 or state==7):
 				break
 		if state==1:
-			id=1
+			self.id=1
 		if (state ==3 or state==7):
-			id=-1
+			self.id=-1
 		if state==4:
-			id=2
+			self.id=2
 		if state==5:
-			id=-2
+			self.id=-2
 		if state==6:
-			id=-3
+			self.id=-3		
+
 	def is_Reserved(self):
-		if (source == "+" or source == "-"):
-			id = 5
-		elif (source == "*" or source == "/"):
-			id = 6;
-		elif (source == "="):
-			id = 18;
-		elif (source == "<" or source == ">" or source == "<=" or source == ">="):
-			id = 7;
-		elif (source == "&&"):
-			id = 9;
-		elif (source == "||"):
-			id = 8;
-		elif (source == "!"):
-			id = 10;
-		elif (source == "("):
-			id = 14;
-		elif (source == ")"):
-			id = 15;
-		elif (source == "{"):
-			id = 16;
-		elif (source == "}"):
-			id = 17;
-		elif (source == ";"):
-			id = 12;
-		elif (source == ","):
-			id = 13;
-		elif (source == "int" or source == "float" or source == "void"):
-			id = 4;
-		elif (source == "string"):
-			id = 3;
-		elif (source == "if"):
-			id = 19;
-		elif (source == "while"):
-			id = 20;
-		elif (source == "return"):
-			id = 21;
-		elif (source == "else"):
-			id = 22;
-		elif (source == "$"):
-			id = 23;
+		src=self.__source
+		if (src == "+" or src == "-"):
+			self.id = 5
+		elif (src == "*" or src == "/"):
+			self.id = 6;
+		elif (src == "="):
+			self.id = 18;
+		elif (src == "<" or src == ">" or src == "<=" or src == ">="):
+			self.id = 7;
+		elif (src == "&&"):
+			self.id = 9;
+		elif (src == "||"):
+			self.id = 8;
+		elif (src == "!"):
+			self.id = 10;
+		elif (src == "("):
+			self.id = 14;
+		elif (src == ")"):
+			self.id = 15;
+		elif (src == "{"):
+			self.id = 16;
+		elif (src == "}"):
+			self.id = 17;
+		elif (src == ";"):
+			self.id = 12;
+		elif (src == ","):
+			self.id = 13;
+		elif(src == "int" or src == "float" or src == "void"):
+			self.id = 4;
+		elif (src == "string"):
+			self.id = 3;
+		elif (src == "if"):
+			self.id = 19;
+		elif (src == "while"):
+			self.id = 20;
+		elif (src == "return"):
+			self.id = 21;
+		elif (src == "else"):
+			self.id = 22;
+		elif (src == "$"):
+			self.id = 23;
 		else:
-			id = -1;
+			self.id = -1;
 
 	def is_ID(self):
-		if((source[0] < 'a' or source[0] > 'z') and (source[0] < 'A' or source[0] > 'Z')):
-			id=-1
+		src=self.__source
+		if src=="":
+			self.id=-1
+			return
+		if((src[0] < 'a' or src[0] > 'z') and (src[0] < 'A' or src[0] > 'Z')):
+			self.id=-1
 		else:
-			for c in source:
+			for c in src:
 				if((c < 'a' or c > 'z') and (c < 'A' or c > 'Z') and (c < '0' or c > '9') and c != '_'):
-					id=-1
+					self.id=-1
 					break
-			id=0
+			self.id=0
 
 	def analysis(self):
 		parte=""
 		copia=self.__source
-		global id
 		for c in copia:
 			parte+=c
-			source=parte
+			print(parte)
+			self.__source=parte
 			if c==' ':
 				parte=""
-				if(id>=0 and id<=2):
-					addMsg()
+				if(self.id>=0 and self.id<=2):
+					self.addMsg()
 			self.is_Number()
-			if(id==-2 or id==-3):
-				if id==-2:
-					id=2
-				if id==-3:
-					id=1
-				parte=""+c
-				source=parte
+			if(self.id==-2 or self.id==-3):
+				if self.id==-2:
+					self.id=2
+				if self.id==-3:
+					self.id=1
+				parte=""#+c
+				self.__source=parte
 				self.addMsg()
-				id=-1
-			if id==-1:
-				is_Reserved()
-				if id==-1:
-					is_ID()
-			if id>=3:
+				self.id=-1
+			if self.id==-1:
+				self.is_Reserved()
+				if self.id==-1:
+					self.is_ID()
+			if self.id>=3:
 				parte=""
-				source==parte
+				self.__source=parte
 				self.addMsg()
-		if(id>=0 and id<=2):
+
+		if(self.id>=0 and self.id<=2):
 			self.addMsg()
 
 
 
 	def addMsg(self):
-		if id==-1:
-			message.append("Error Lexico, ")
-		elif id==0:
-			message.append("Identificador, ")
-		elif id==1:
-			message.append("Numero entero, ")
-		elif id==2:
-			message.append("Numero real, ")
-		elif id==3:
-			message.append("Cadena, ")
-		elif id==4:
-			message.append("Tipo de dato, ")
-		elif id==5:
-			message.append("Operador de adicion, ")
-		elif id==6:
-			message.append("Operador de multiplicaion, ")
-		elif id==7:
-			message.append("Operador Relacional, ")
-		elif id==8:
-			message.append("Operador Or, ")
-		elif id==9:
-			message.append("Operador And, ")
-		elif id==10:
-			message.append("Operador Not, ")
-		elif id==11:
-			message.append("Operador de Igualdad, ")
-		elif id==12:
-			message.append("Simbolo Punto y coma, ")
-		elif id==13:
-			message.append("Simbolo Coma, ")
-		elif (id == 14 or id == 15):
-			message.append("Simbolo Parentesis, ")
-		elif (id == 16 or id == 17):
-			message.append("Simbolo Llave, ")
-		elif id==18:
-			message.append("Operador de Asignacion, ")
-		elif id==19:
-			message.append("Condicional if, ")
-		elif id==20:
-			message.append("Ciclo whie, ")
-		elif id==21:
-			message.append("Retorno de valor, ")
-		elif id==22:
-			message.append("Condicional else, ")
-		elif id==23:
-			message.append("Simbolo $, ")
+		if self.id==-1:
+			self.message.append("Error Lexico, ")
+		elif self.id==0:
+			self.message.append("Identificador, ")
+		elif self.id==1:
+			self.message.append("Numero entero, ")
+		elif self.id==2:
+			self.message.append("Numero real, ")
+		elif self.id==3:
+			self.message.append("Cadena, ")
+		elif self.id==4:
+			self.message.append("Tipo de dato, ")
+		elif self.id==5:
+			self.message.append("Operador de adicion, ")
+		elif self.id==6:
+			self.message.append("Operador de multiplicacion, ")
+		elif self.id==7:
+			self.message.append("Operador Relacional, ")
+		elif self.id==8:
+			self.message.append("Operador Or, ")
+		elif self.id==9:
+			self.message.append("Operador And, ")
+		elif self.id==10:
+			self.message.append("Operador Not, ")
+		elif self.id==11:
+			self.message.append("Operador de Igualdad, ")
+		elif self.id==12:
+			self.message.append("Simbolo Punto y coma, ")
+		elif self.id==13:
+			self.message.append("Simbolo Coma, ")
+		elif (self.id == 14 or self.id == 15):
+			self.message.append("Simbolo Parentesis, ")
+		elif (self.id == 16 or self.id == 17):
+			self.message.append("Simbolo Llave, ")
+		elif self.id==18:
+			self.message.append("Operador de Asignacion, ")
+		elif self.id==19:
+			self.message.append("Condicional if, ")
+		elif self.id==20:
+			self.message.append("Ciclo while, ")
+		elif self.id==21:
+			self.message.append("Retorno de valor, ")
+		elif self.id==22:
+			self.message.append("Condicional else, ")
+		elif self.id==23:
+			self.message.append("Simbolo $, ")
 
 
 

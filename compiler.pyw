@@ -5,9 +5,9 @@ root=Tk()
 
 root.title("Compilador en Python")
 
-root.geometry("500x270")
+root.geometry("500x360")
 
-root.resizable(0,0)
+root.resizable(1,1)
 
 #root.config(bg="green")
 
@@ -48,11 +48,16 @@ textEntry.place(x=10,y=30)
 #		-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
 
 def analisis():
-	mensaje.set("ffffff")
+	#mensaje.set("ffffff")
+	listBox.delete(0,END)
 	l=Lexico()
+	print(textEntry.get())
 	l.set_source(textEntry.get())
 	l.analysis()
 	print(l.get_message())
+	l.get_message().remove("")
+	for m in l.get_message():
+		listBox.insert(END,m)
 
 
 boton=Button(inFrame,text="Analizar", command=analisis)
@@ -82,20 +87,15 @@ outFrame.place(x=10,y=165);
 
 outFrame.config(bd=3,relief="ridge")
 
+s=Scrollbar(outFrame)
 
-mensaje=StringVar()
-mensaje.set("gg")
+listBox=Listbox(outFrame, width=64,height=10,yscrollcommand=s.set)
 
-msgLabel=Label(outFrame, textvariable=mensaje)
+s.config(command=listBox.yview)
 
-msgLabel.config(bg="white",fg="black", font=("Consolas",12))
+s.pack(side=RIGHT, fill=Y)
 
-
-msgLabel.place(x=0,y=0)
+listBox.pack(side=LEFT, fill=BOTH, expand=True)
 
 
-#Agregar Scroll a un Text
-#scrollVert=Scrollbar(frame,command=textUno.yview) luego no se si pack o place
-# en config agrgar sticky="nsew"
-#text.config(yscrollcommand=scrollVert.set)
 root.mainloop() 
