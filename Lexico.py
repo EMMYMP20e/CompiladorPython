@@ -125,7 +125,7 @@ class Lexico(object):
 			self.__source=parte
 			if c==' ':
 				parte=""
-				if(self.id>=0 and self.id<=2):
+				if(self.id==0):#if(self.id>=0 and self.id<=2):
 					self.addMsg()
 			self.is_Number()
 			if(self.id==-2 or self.id==-3):
