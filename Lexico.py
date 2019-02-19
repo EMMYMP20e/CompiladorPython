@@ -8,6 +8,7 @@ class Lexico(object):
 		self.source=""
 		self.id=-1
 		self.message=[""]
+		self.ids=[]
 	def set_source(self,source):
 		self.__source=source
 	def set_message(self,message):
@@ -17,6 +18,8 @@ class Lexico(object):
 		return self.__source
 	def get_message(self):
 		return self.message
+	def get_ids(self):
+		return self.ids
 
 	def is_Number(self):
 		state=0
@@ -113,7 +116,7 @@ class Lexico(object):
 			for c in src:
 				if((c < 'a' or c > 'z') and (c < 'A' or c > 'Z') and (c < '0' or c > '9') and c != '_'):
 					self.id=-1
-					break
+					return
 			self.id=0
 
 	def analysis(self):
@@ -121,12 +124,12 @@ class Lexico(object):
 		copia=self.__source
 		for c in copia:
 			parte+=c
-			print(parte)
 			self.__source=parte
 			if c==' ':
 				parte=""
 				if(self.id==0):#if(self.id>=0 and self.id<=2):
 					self.addMsg()
+					self.addID()
 			self.is_Number()
 			if(self.id==-2 or self.id==-3):
 				if self.id==-2:
@@ -136,20 +139,40 @@ class Lexico(object):
 				parte=""#+c
 				self.__source=parte
 				self.addMsg()
+				self.addID()
 				self.id=-1
 			if self.id==-1:
 				self.is_Reserved()
 				if self.id==-1:
 					self.is_ID()
+					if self.id==-1:
+						self.__source=c
+						self.is_Reserved()
+						d=int(self.id)
+						if self.id==-1:
+							self.addMsg()
+							self.addID()
+						else:
+							self.id=0
+							self.addMsg()
+							self.addID()
+							self.id=d
+							self.addMsg()
+							self.addID()
+							self.id=-1
+						parte=""
 			if self.id>=3:
 				parte=""
 				self.__source=parte
 				self.addMsg()
+				self.addID()
 
 		if(self.id>=0 and self.id<=2):
 			self.addMsg()
+			self.addID()
 
-
+	def addID(self):
+		self.ids.append(self.id);
 
 	def addMsg(self):
 		if self.id==-1:
@@ -197,9 +220,4 @@ class Lexico(object):
 		elif self.id==22:
 			self.message.append("Condicional else, ")
 		elif self.id==23:
-			self.message.append("Simbolo $, ")
-
-
-
-
-		
+			self.message.append("Simbolo $, ")		

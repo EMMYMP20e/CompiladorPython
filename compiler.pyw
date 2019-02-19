@@ -5,7 +5,7 @@ root=Tk()
 
 root.title("Compilador en Python")
 
-root.geometry("500x360")
+root.geometry("500x280")#500x360
 
 root.resizable(1,1)
 
@@ -45,19 +45,81 @@ textEntry.config(bg="white",fg="black", font=("Consolas",12))
 
 textEntry.place(x=10,y=30)
 
-#		-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
 
+
+def sintaxAnalysis(l):
+	ids=l.get_ids()
+	copia=list(ids)
+	c=0
+	while c<copia.count(5):
+		ids.remove(5)
+		c+=1
+	c=0
+	for i in copia:
+		if i==5:
+			ids.insert(c,1)
+		c+=1
+	#print(ids)
+	ids.append(2)
+	stack=[]
+	tableLR=[[2,0,0,1],[0,0,-1,0],[0,3,-3,0],[2,0,0,4],[0,0,-2,0]]
+	simbols=[3,3]
+	reductions=[6,2]
+	state=False
+	stack.append(0)
+	stack.append(0)
+	count=0
+	while True:
+		x=stack.pop()
+		stack.append(x)
+		try:
+			y=ids[count]
+		except:
+			break
+		try:
+			action=tableLR[x][y]
+		except:
+			break
+		#print(action)
+		if action==0:
+			break;
+		if action>0:
+			stack.append(ids[count])
+			stack.append(action)
+			count+=1
+		elif action<0:
+			if action==-1:
+				state=True
+				break
+			index=(action*-1)-2
+			sim=simbols[index]
+			red=reductions[index]
+			while red>0:
+				stack.pop()
+				red-=1
+			b=stack.pop()
+			stack.append(b)
+			print(b,sim)
+			x=tableLR[b][sim]
+			stack.append(sim)
+			stack.append(x)
+	print(state)
+	if state:
+		mensaje.set("Input Aceptado")
+	else:
+		mensaje.set("Input Incorrecto")
+
+
+#		-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
 def analisis():
-	#mensaje.set("ffffff")
-	listBox.delete(0,END)
 	l=Lexico()
-	print(textEntry.get())
 	l.set_source(textEntry.get())
 	l.analysis()
-	print(l.get_message())
 	l.get_message().remove("")
-	for m in l.get_message():
-		listBox.insert(END,m)
+	print(l.get_ids())
+	sintaxAnalysis(l)
+	
+	
 
 
 boton=Button(inFrame,text="Analizar", command=analisis)
@@ -87,7 +149,7 @@ outFrame.place(x=10,y=165);
 
 outFrame.config(bd=3,relief="ridge")
 
-s=Scrollbar(outFrame)
+"""s=Scrollbar(outFrame)
 
 listBox=Listbox(outFrame, width=64,height=10,yscrollcommand=s.set)
 
@@ -95,7 +157,31 @@ s.config(command=listBox.yview)
 
 s.pack(side=RIGHT, fill=Y)
 
-listBox.pack(side=LEFT, fill=BOTH, expand=True)
+listBox.pack(side=LEFT, fill=BOTH, expand=True)"""
+
+mensaje=StringVar()
+mensaje.set("")
+
+RLabel=Label(outFrame, textvariable=mensaje)
+
+RLabel.config(bg="white",fg="black", font=("Consolas",12))
+
+RLabel.place(x=5,y=10)
 
 
 root.mainloop() 
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
