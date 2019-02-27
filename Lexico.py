@@ -1,9 +1,4 @@
 class Lexico(object):
-	#source=""
-	
-	#id=0
-	
-	#message=[""]
 	def __init__(self):
 		self.source=""
 		self.id=-1
@@ -28,40 +23,34 @@ class Lexico(object):
 				if (c>='0' and c<='9'):
 					state=1
 				else:
-					state=7
-
+					state=3
 			elif state==1:
 				if (c<'0' or c>'9'):
-					state=6
+					state=3
 				if c=='.':
 					state=2
-
 			elif state==2:
 				if (c<'0' or c>'9'):
 					state=3
 				else:
 					state=4
-
 			elif state==4:
 				if (c<'0' or c>'9'):
-					state=5
-				if c=='.':
 					state=3
-			if (state==3 or state ==5 or state ==6 or state==7):
+			if (state==3):
 				break
 		if state==1:
 			self.id=1
-		if (state ==3 or state==7):
+			return True
+		if (state ==3):
 			self.id=-1
+			return False
 		if state==4:
 			self.id=2
-		if state==5:
-			self.id=-2
-		if state==6:
-			self.id=-3		
+			return True	
 
 	def is_Reserved(self):
-		src=self.__source
+		src=self.__source 
 		if (src == "+" or src == "-"):
 			self.id = 5
 		elif (src == "*" or src == "/"):
@@ -103,73 +92,124 @@ class Lexico(object):
 		elif (src == "$"):
 			self.id = 23;
 		else:
-			self.id = -1;
+			self.id=-1
+		if self.id!=-1:
+			return True
+		else:
+			return False
+
 
 	def is_ID(self):
 		src=self.__source
 		if src=="":
 			self.id=-1
-			return
+			return False
 		if((src[0] < 'a' or src[0] > 'z') and (src[0] < 'A' or src[0] > 'Z')):
 			self.id=-1
+			return False
 		else:
 			for c in src:
 				if((c < 'a' or c > 'z') and (c < 'A' or c > 'Z') and (c < '0' or c > '9') and c != '_'):
 					self.id=-1
-					return
+					return False
 			self.id=0
+			return True
 
 	def analysis(self):
 		parte=""
+		state=0
 		copia=self.__source
-		for c in copia:
+		i=0
+		state=0
+		while i<len(copia):
+			c=copia[i]
 			parte+=c
+			print parte,state,self.id
 			self.__source=parte
-			if c==' ':
+			if state==0:
+				if self.is_ID():
+					state=1
+				if self.is_Reserved():
+					state=3
+					i=i-1
+				elif self.is_Number():
+					state=5
+				elif (c==' '  or c=='\t' or c=='\n'):
+					state=0
+					parte=""
+			elif state==1:
+				if self.is_ID():
+					state=1
+				if self.is_Reserved():
+					state=2
+					i=i-1
+					print "hola"
+				elif (c==' '  or c=='\t' or c=='\n'):
+					state=2
+					i=i-1
+				else:
+					cid=self.id
+					self.__source=c
+					if self.is_Reserved():
+						state=2
+						if anterior==1:
+							self.id=0
+						else:
+							self.id=cid
+						print self.id
+						self.addMsg()
+						self.addID()
+						self.is_Reserved()
+						parte=""
+						i=i-1
+
+			elif state==2:
+				if self.id==7:
+					c=copia[i+1]
+					if c=='=':
+						i=i+1
+				print self.id
+				self.addMsg()
+				self.addID()
 				parte=""
-				if(self.id==0):#if(self.id>=0 and self.id<=2):
+				state=0
+
+			elif state==3:
+				if self.id==7:
+					c=copia[i+1]
+					if c=='=':
+						i=i+1
+				print self.id
+				self.addMsg()
+				self.addID()
+				parte=""
+				state=0
+
+			elif state==4:
+				if ~is_Number():
+					if c!='.':
+						state=5
+				cid=self.id
+				self.__source=c
+				if self.is_Reserved():
+					state=2
+					self.id=cid
+					print self.id
 					self.addMsg()
 					self.addID()
-			self.is_Number()
-			if(self.id==-2 or self.id==-3):
-				if self.id==-2:
-					self.id=2
-				if self.id==-3:
-					self.id=1
-				parte=""#+c
-				self.__source=parte
-				self.addMsg()
-				self.addID()
+					self.is_Reserved()
+					parte=""
+					i=i-1
+			elif state==5:
 				self.id=-1
-			if self.id==-1:
-				self.is_Reserved()
-				if self.id==-1:
-					self.is_ID()
-					if self.id==-1:
-						self.__source=c
-						self.is_Reserved()
-						d=int(self.id)
-						if self.id==-1:
-							self.addMsg()
-							self.addID()
-						else:
-							self.id=0
-							self.addMsg()
-							self.addID()
-							self.id=d
-							self.addMsg()
-							self.addID()
-							self.id=-1
-						parte=""
-			if self.id>=3:
-				parte=""
-				self.__source=parte
+				print self.id
 				self.addMsg()
 				self.addID()
+				break;
+			i+=1
+			anterior=state
 
-		if(self.id>=0 and self.id<=2):
-			self.addMsg()
-			self.addID()
+
 
 	def addID(self):
 		self.ids.append(self.id);

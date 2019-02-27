@@ -5,7 +5,7 @@ root=Tk()
 
 root.title("Compilador en Python")
 
-root.geometry("500x280")#500x360
+root.geometry("500x400")#500x360
 
 root.resizable(1,1)
 
@@ -31,25 +31,31 @@ inLabel.place(x=0,y=0)
 
 inFrame=Frame(root)
 
-inFrame.config( width=480, height=90, bg="#ECEFF1") #
+inFrame.config( width=480, height=190, bg="#ECEFF1") #
 
 inFrame.place(x=10,y=37);
 
 inFrame.config(bd=3,relief="ridge")
 
 #		-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-
-textEntry=Entry(inFrame)
+'''
+textEntry=Text(inFrame)
 
 textEntry.config(bg="white",fg="black", font=("Consolas",12))
 
-textEntry.place(x=10,y=30)
+textEntry.place(x=10,y=30)'''
+TextArea = Text(inFrame,width=400, height=100)
+ScrollBar = Scrollbar(inFrame)
+ScrollBar.config(command=TextArea.yview)
+TextArea.config(yscrollcommand=ScrollBar.set)
+#ScrollBar.place(x=50,7=0)
+TextArea.place(x=0,y=0)
 
 
 
 def sintaxAnalysis(l):
 	ids=l.get_ids()
-	copia=list(ids)
+	'''copia=list(ids)
 	c=0
 	while c<copia.count(5):
 		ids.remove(5)
@@ -59,12 +65,34 @@ def sintaxAnalysis(l):
 		if i==5:
 			ids.insert(c,1)
 		c+=1
-	#print(ids)
-	ids.append(2)
+	'''
+	ids.append(23)
+	print ids
 	stack=[]
+	'''
 	tableLR=[[2,0,0,1],[0,0,-1,0],[0,3,-3,0],[2,0,0,4],[0,0,-2,0]]
+	print tableLR
 	simbols=[3,3]
 	reductions=[6,2]
+	'''
+	simbols=[]
+	reductions=[]
+	tableLR=[]
+	fileRules = open("rules.txt", "r")
+	for linea in fileRules.readlines():
+		nums=linea.split()
+		simbols.append(int(nums.pop(0)))
+		reductions.append(int(nums.pop(0)))
+	fileRules.close() 
+	fileTable=open("tableLR.txt","r")
+	for line in fileTable.readlines():
+		ints=[]
+		strLine=line.split()
+		for s in strLine:
+			ints.append(int(s))
+		tableLR.append(ints)
+	fileTable.close()
+
 	state=False
 	stack.append(0)
 	stack.append(0)
@@ -72,6 +100,7 @@ def sintaxAnalysis(l):
 	while True:
 		x=stack.pop()
 		stack.append(x)
+
 		try:
 			y=ids[count]
 		except:
@@ -80,7 +109,9 @@ def sintaxAnalysis(l):
 			action=tableLR[x][y]
 		except:
 			break
-		#print(action)
+		print ("Pila: ",stack)
+		print ("entrada: ",y)
+		print ("Salida",action)
 		if action==0:
 			break;
 		if action>0:
@@ -94,17 +125,19 @@ def sintaxAnalysis(l):
 			index=(action*-1)-2
 			sim=simbols[index]
 			red=reductions[index]
+			red=red*2
+			print sim,red
 			while red>0:
 				stack.pop()
 				red-=1
 			b=stack.pop()
 			stack.append(b)
-			print(b,sim)
+			
 			x=tableLR[b][sim]
 			stack.append(sim)
 			stack.append(x)
-	print(state)
-	if state:
+	
+	if state==True:
 		mensaje.set("Input Aceptado")
 	else:
 		mensaje.set("Input Incorrecto")
@@ -113,10 +146,10 @@ def sintaxAnalysis(l):
 #		-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
 def analisis():
 	l=Lexico()
-	l.set_source(textEntry.get())
+	l.set_source(TextArea.get("1.0",END))
 	l.analysis()
 	l.get_message().remove("")
-	print(l.get_ids())
+	#print(l.get_ids())
 	sintaxAnalysis(l)
 	
 	
@@ -131,7 +164,7 @@ outputFrame=Frame(root)
 
 outputFrame.config( width=480, height=35, bg="#009A80") #009AF6
 
-outputFrame.place(x=10,y=130);
+outputFrame.place(x=10,y=230);
 
 outputFrame.config(bd=3,relief="ridge")
 
@@ -145,7 +178,7 @@ outFrame=Frame(root)
 
 outFrame.config( width=480, height=90, bg="white") #009AF6
 
-outFrame.place(x=10,y=165);
+outFrame.place(x=10,y=265);
 
 outFrame.config(bd=3,relief="ridge")
 
