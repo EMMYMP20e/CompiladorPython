@@ -124,7 +124,6 @@ class Lexico(object):
 		while i<len(copia):
 			c=copia[i]
 			parte+=c
-			print parte,state,self.id
 			self.__source=parte
 			if state==0:
 				if self.is_ID():
@@ -143,7 +142,6 @@ class Lexico(object):
 				if self.is_Reserved():
 					state=2
 					i=i-1
-					print "hola"
 				elif (c==' '  or c=='\t' or c=='\n'):
 					state=2
 					i=i-1
@@ -156,7 +154,6 @@ class Lexico(object):
 							self.id=0
 						else:
 							self.id=cid
-						print self.id
 						self.addMsg()
 						self.addID()
 						self.is_Reserved()
@@ -168,7 +165,6 @@ class Lexico(object):
 					c=copia[i+1]
 					if c=='=':
 						i=i+1
-				print self.id
 				self.addMsg()
 				self.addID()
 				parte=""
@@ -179,7 +175,6 @@ class Lexico(object):
 					c=copia[i+1]
 					if c=='=':
 						i=i+1
-				print self.id
 				self.addMsg()
 				self.addID()
 				parte=""
@@ -194,7 +189,6 @@ class Lexico(object):
 				if self.is_Reserved():
 					state=2
 					self.id=cid
-					print self.id
 					self.addMsg()
 					self.addID()
 					self.is_Reserved()
@@ -202,7 +196,6 @@ class Lexico(object):
 					i=i-1
 			elif state==5:
 				self.id=-1
-				print self.id
 				self.addMsg()
 				self.addID()
 				break;
