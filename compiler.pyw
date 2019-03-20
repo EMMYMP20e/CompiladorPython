@@ -1,5 +1,6 @@
 from Tkinter import *
 from Lexico import Lexico
+from sintacticTree import *
 
 root=Tk()
 
@@ -55,6 +56,7 @@ TextArea.place(x=0,y=0)
 
 def sintaxAnalysis(l):
 	ids=l.get_ids()
+	node=Node(None)
 	'''copia=list(ids)
 	c=0
 	while c<copia.count(5):
@@ -66,23 +68,12 @@ def sintaxAnalysis(l):
 			ids.insert(c,1)
 		c+=1
 	'''
-	ids.append(3)
+	ids.append(23)
 	print(ids)
 	stack=[]
 	'''
-	tableLR=[[2,0,0,1],[0,0,-1,0],[0,3,-3,0],[2,0,0,4],[0,0,-2,0]]
-	print tableLR
-	simbols=[3,3]
-	reductions=[6,2]
 	'''
 	h=l.get_eps()
-	"""for p in h:
-		print(p)
-	print(h)
-	bl=[]
-	bl=ids
-	bl.append(h.pop())
-	print (bl)"""
 	simbols=[]
 	reductions=[]
 	tableLR=[]
@@ -92,7 +83,6 @@ def sintaxAnalysis(l):
 		nums=linea.split()
 		simbols.append(int(nums.pop(0)))
 		reductions.append(int(nums.pop(0)))
-		names.append(nums.pop(0))
 	fileRules.close() 
 	fileTable=open("tableLR.txt","r")
 	for line in fileTable.readlines():
@@ -112,8 +102,6 @@ def sintaxAnalysis(l):
 		stack.append(x)
 		try:
 			y=ids[count]
-			if y==5:
-				y=2
 		except:
 			print('y')
 			break
@@ -139,16 +127,123 @@ def sintaxAnalysis(l):
 			sim=simbols[index]
 			red=reductions[index]
 			red=red*2
-			nam=names[index]
-			print(sim,red,nam)
-			while red>0:
-				stack.pop()
-				red-=1
+			daRule="R"+str(index+1)
+			print(" -"+daRule,red)
+			if (index+1)==1:
+				node=Rule1(stack)
+			elif (index+1)==2:
+				node=Rule2(stack)
+			elif (index+1)==3:
+				node=Rule3(stack)
+			elif (index+1)==4:
+				node=Rule4(stack)
+			elif (index+1)==5:
+				node=Rule5(stack)
+			elif (index+1)==6:
+				node=Rule6(stack)
+			elif (index+1)==7:
+				node=Rule7(stack)
+			elif (index+1)==8:
+				node=Rule8(stack)
+			elif (index+1)==9:
+				node=Rule9(stack)
+			elif (index+1)==10:
+				node=Rule10(stack)
+			elif (index+1)==11:
+				node=Rule11(stack)
+			elif (index+1)==12:
+				node=Rule12(stack)
+			elif (index+1)==13:
+				node=Rule13(stack)
+			elif (index+1)==14:
+				node=Rule14(stack)
+			elif (index+1)==15:
+				node=Rule15(stack)
+			elif (index+1)==16:
+				node=Rule16(stack)
+			elif (index+1)==17:
+				node=Rule17(stack)
+			elif (index+1)==18:
+				node=Rule18(stack)
+			elif (index+1)==19:
+				node=Rule19(stack)
+			elif (index+1)==20:
+				node=Rule20(stack)
+			elif (index+1)==21:
+				node=Rule21(stack)
+			elif (index+1)==22:
+				node=Rule22(stack)
+			elif (index+1)==23:
+				node=Rule23(stack)
+			elif (index+1)==24:
+				node=Rule24(stack)
+			elif (index+1)==25:
+				node=Rule25(stack)
+			elif (index+1)==26:
+				node=Rule26(stack)
+			elif (index+1)==27:
+				node=Rule27(stack)
+			elif (index+1)==28:
+				node=Rule28(stack)
+			elif (index+1)==29:
+				node=Rule29(stack)
+			elif (index+1)==30:
+				node=Rule30(stack)
+			elif (index+1)==31:
+				node=Rule31(stack)
+			elif (index+1)==32:
+				node=Rule32(stack)
+			elif (index+1)==33:
+				node=Rule33(stack)
+			elif (index+1)==34:
+				node=Rule34(stack)
+			elif (index+1)==35:
+				node=Rule35(stack)
+			elif (index+1)==36:
+				node=Rule36(stack)
+			elif (index+1)==37:
+				node=Rule37(stack)
+			elif (index+1)==38:
+				node=Rule38(stack)
+			elif (index+1)==39:
+				node=Rule39(stack)
+			elif (index+1)==40:
+				node=Rule40(stack)
+			elif (index+1)==41:
+				node=Rule41(stack)
+			elif (index+1)==42:
+				node=Rule42(stack)
+			elif (index+1)==43:
+				node=Rule43(stack)
+			elif (index+1)==44:
+				node=Rule44(stack)
+			elif (index+1)==45:
+				node=Rule45(stack)
+			elif (index+1)==46:
+				node=Rule46(stack)
+			elif (index+1)==47:
+				node=Rule47(stack)
+			elif (index+1)==48:
+				node=Rule48(stack)
+			elif (index+1)==49:
+				node=Rule49(stack)
+			elif (index+1)==50:
+				node=Rule50(stack)
+			elif (index+1)==51:
+				node=Rule51(stack)
+			elif (index+1)==52:
+				node=Rule52(stack)
+				#print(stack)
+			else:
+				while red>0:
+					stack.pop()
+					red-=1
+			print(node)
 			b=stack.pop()
 			stack.append(b)
 			
 			x=tableLR[b][sim]
-			stack.append(nam)
+			stack.append(node)# Aqui se cambia por node
 			stack.append(x)
 	
 	if state==True:
