@@ -1,9 +1,22 @@
+
+
+class Identificador(object):
+	def __init__(self,pila):
+		self.pila=pila
+
+class Entero(object):
+	def __init__(self,pila):
+		self.pila=pila
+
+
 class Lexico(object):
 	def __init__(self):
 		self.source=""
 		self.id=-1
 		self.message=[""]
 		self.ids=[]
+		self.eps=[]
+		self.parte=""
 	def set_source(self,source):
 		self.__source=source
 	def set_message(self,message):
@@ -15,6 +28,8 @@ class Lexico(object):
 		return self.message
 	def get_ids(self):
 		return self.ids
+	def get_eps(self):
+		return self.eps
 
 	def is_Number(self):
 		state=0
@@ -116,18 +131,23 @@ class Lexico(object):
 			return True
 
 	def analysis(self):
-		parte=""
+		
 		state=0
 		copia=self.__source
 		i=0
 		state=0
+		isid=False
 		while i<len(copia):
 			c=copia[i]
-			parte+=c
-			self.__source=parte
+			self.parte+=c
+			self.__source=self.parte
 			if state==0:
 				if self.is_ID():
 					state=1
+
+					
+					if i==(len(copia)-1):
+						i=i-1
 				if self.is_Reserved():
 					state=3
 					i=i-1
@@ -135,14 +155,18 @@ class Lexico(object):
 					state=5
 				elif (c==' '  or c=='\t' or c=='\n'):
 					state=0
-					parte=""
+					self.parte=""
 			elif state==1:
 				if self.is_ID():
 					state=1
+					
 				if self.is_Reserved():
 					state=2
 					i=i-1
-				elif (c==' '  or c=='\t' or c=='\n'):
+				elif (c==' '  or c=='\t' or c=='\n'):# or i==(len(copia)-1)):
+					
+					if(state==1):
+						isid=True
 					state=2
 					i=i-1
 				else:
@@ -154,10 +178,11 @@ class Lexico(object):
 							self.id=0
 						else:
 							self.id=cid
+						
 						self.addMsg()
 						self.addID()
 						self.is_Reserved()
-						parte=""
+						self.parte=""
 						i=i-1
 
 			elif state==2:
@@ -165,9 +190,12 @@ class Lexico(object):
 					c=copia[i+1]
 					if c=='=':
 						i=i+1
+				if(isid):
+					self.id=0
+					isid=False
 				self.addMsg()
 				self.addID()
-				parte=""
+				self.parte=""
 				state=0
 
 			elif state==3:
@@ -177,7 +205,7 @@ class Lexico(object):
 						i=i+1
 				self.addMsg()
 				self.addID()
-				parte=""
+				self.parte=""
 				state=0
 
 			elif state==4:
@@ -189,13 +217,15 @@ class Lexico(object):
 				if self.is_Reserved():
 					state=2
 					self.id=cid
+					
 					self.addMsg()
 					self.addID()
 					self.is_Reserved()
-					parte=""
+					self.parte=""
 					i=i-1
 			elif state==5:
 				self.id=-1
+				
 				self.addMsg()
 				self.addID()
 				break;
@@ -208,6 +238,8 @@ class Lexico(object):
 		self.ids.append(self.id);
 
 	def addMsg(self):
+
+		self.addEps()
 		if self.id==-1:
 			self.message.append("Error Lexico, ")
 		elif self.id==0:
@@ -253,4 +285,13 @@ class Lexico(object):
 		elif self.id==22:
 			self.message.append("Condicional else, ")
 		elif self.id==23:
-			self.message.append("Simbolo $, ")		
+			self.message.append("Simbolo $, ")	
+
+	def addEps(self):
+		lon=len(self.parte)
+		if lon>1:
+			s=self.parte[:lon-1]
+		else:
+			s=self.parte
+		self.eps.append(s)
+		

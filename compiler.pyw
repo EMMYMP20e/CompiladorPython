@@ -66,8 +66,8 @@ def sintaxAnalysis(l):
 			ids.insert(c,1)
 		c+=1
 	'''
-	ids.append(23)
-	print ids
+	ids.append(3)
+	print(ids)
 	stack=[]
 	'''
 	tableLR=[[2,0,0,1],[0,0,-1,0],[0,3,-3,0],[2,0,0,4],[0,0,-2,0]]
@@ -75,14 +75,24 @@ def sintaxAnalysis(l):
 	simbols=[3,3]
 	reductions=[6,2]
 	'''
+	h=l.get_eps()
+	"""for p in h:
+		print(p)
+	print(h)
+	bl=[]
+	bl=ids
+	bl.append(h.pop())
+	print (bl)"""
 	simbols=[]
 	reductions=[]
 	tableLR=[]
+	names=[]
 	fileRules = open("rules.txt", "r")
 	for linea in fileRules.readlines():
 		nums=linea.split()
 		simbols.append(int(nums.pop(0)))
 		reductions.append(int(nums.pop(0)))
+		names.append(nums.pop(0))
 	fileRules.close() 
 	fileTable=open("tableLR.txt","r")
 	for line in fileTable.readlines():
@@ -94,28 +104,31 @@ def sintaxAnalysis(l):
 	fileTable.close()
 
 	state=False
-	stack.append(0)
+	stack.append('$')
 	stack.append(0)
 	count=0
 	while True:
 		x=stack.pop()
 		stack.append(x)
-
 		try:
 			y=ids[count]
+			if y==5:
+				y=2
 		except:
+			print('y')
 			break
 		try:
 			action=tableLR[x][y]
 		except:
+			print(x,y)
 			break
 		print ("Pila: ",stack)
-		print ("entrada: ",y)
+		print ("Entrada: ",y)
 		print ("Salida",action)
 		if action==0:
 			break;
 		if action>0:
-			stack.append(ids[count])
+			stack.append(h[count])
 			stack.append(action)
 			count+=1
 		elif action<0:
@@ -126,7 +139,8 @@ def sintaxAnalysis(l):
 			sim=simbols[index]
 			red=reductions[index]
 			red=red*2
-			print sim,red
+			nam=names[index]
+			print(sim,red,nam)
 			while red>0:
 				stack.pop()
 				red-=1
@@ -134,7 +148,7 @@ def sintaxAnalysis(l):
 			stack.append(b)
 			
 			x=tableLR[b][sim]
-			stack.append(sim)
+			stack.append(nam)
 			stack.append(x)
 	
 	if state==True:
