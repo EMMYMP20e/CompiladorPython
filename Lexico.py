@@ -131,7 +131,6 @@ class Lexico(object):
 			return True
 
 	def analysis(self):
-		
 		state=0
 		copia=self.__source
 		i=0
@@ -152,7 +151,7 @@ class Lexico(object):
 					state=3
 					i=i-1
 				elif self.is_Number():
-					state=5
+					state=4							#5
 				elif (c==' '  or c=='\t' or c=='\n'):
 					state=0
 					self.parte=""
@@ -209,6 +208,18 @@ class Lexico(object):
 				state=0
 
 			elif state==4:
+				if (c!='.'):
+					if (c<'0' or c>'9'):
+						self.addMsg()
+						self.addID()
+						self.parte=""
+						state=0
+						i=i-1
+					self.is_Number()
+
+
+
+			"""elif state==4:
 				if ~is_Number():
 					if c!='.':
 						state=5
@@ -228,7 +239,7 @@ class Lexico(object):
 				
 				self.addMsg()
 				self.addID()
-				break;
+				break;"""
 			i+=1
 			anterior=state
 

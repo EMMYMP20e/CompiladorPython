@@ -110,7 +110,14 @@ def sintaxAnalysis(l):
 		except:
 			print(x,y)
 			break
-		print ("Pila: ",stack)
+		
+		strStack=[]
+		for i in stack:
+			try:
+				strStack.append(i.get_Name())
+			except:
+				strStack.append(i)
+		print ("Pila: ",strStack)
 		print ("Entrada: ",y)
 		print ("Salida",action)
 		if action==0:
@@ -238,12 +245,11 @@ def sintaxAnalysis(l):
 				while red>0:
 					stack.pop()
 					red-=1
-			print(node)
 			b=stack.pop()
 			stack.append(b)
 			
 			x=tableLR[b][sim]
-			stack.append(node)# Aqui se cambia por node
+			stack.append(node)
 			stack.append(x)
 	
 	if state==True:

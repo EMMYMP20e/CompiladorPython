@@ -4,6 +4,8 @@ class Node(object):
 		self.name=" "
 	def __str__(self):
 		return self.name
+	def get_Name(self):
+		return self.name
 
 
 class Rule1(Node):
@@ -128,7 +130,7 @@ class Rule14(Node):
 		pila.pop()
 		pila.pop()		#}
 		pila.pop()
-		id1.pila.pop()
+		id1=pila.pop()
 		pila.pop()
 		pila.pop()		#{
 		self.name="R14"
