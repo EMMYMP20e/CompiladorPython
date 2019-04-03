@@ -135,7 +135,7 @@ def sintaxAnalysis(l):
 			red=reductions[index]
 			red=red*2
 			daRule="R"+str(index+1)
-			print(" -"+daRule,red)
+			#print(" -"+daRule,red)
 			if (index+1)==1:
 				node=Rule1(stack)
 			elif (index+1)==2:
@@ -251,7 +251,11 @@ def sintaxAnalysis(l):
 			x=tableLR[b][sim]
 			stack.append(node)
 			stack.append(x)
-	
+	node.muestra()
+	print(node.semantico())
+	#tabla=[],[]
+	#tabla.add(2,3)
+	#print tabla
 	if state==True:
 		mensaje.set("Input Aceptado")
 	else:

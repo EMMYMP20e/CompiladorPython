@@ -1,14 +1,3 @@
-
-
-class Identificador(object):
-	def __init__(self,pila):
-		self.pila=pila
-
-class Entero(object):
-	def __init__(self,pila):
-		self.pila=pila
-
-
 class Lexico(object):
 	def __init__(self):
 		self.source=""
