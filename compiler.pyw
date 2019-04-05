@@ -1,12 +1,14 @@
 from Tkinter import *
 from Lexico import Lexico
 from sintacticTree import *
+from ScrolledText import ScrolledText
+
 
 root=Tk()
 
 root.title("Compilador en Python")
 
-root.geometry("500x400")#500x360
+root.geometry("930x520")#500x360
 
 root.resizable(1,1)
 
@@ -32,7 +34,7 @@ inLabel.place(x=0,y=0)
 
 inFrame=Frame(root)
 
-inFrame.config( width=480, height=190, bg="#ECEFF1") #
+inFrame.config( width=480, height=250, bg="#ECEFF1") #
 
 inFrame.place(x=10,y=37);
 
@@ -45,12 +47,18 @@ textEntry=Text(inFrame)
 textEntry.config(bg="white",fg="black", font=("Consolas",12))
 
 textEntry.place(x=10,y=30)'''
-TextArea = Text(inFrame,width=400, height=100)
+TextArea=ScrolledText(inFrame,undo=True)
+TextArea.config(width=50, height=14)
+TextArea.place(x=0,y=0)
+#BTextArea.place(x=0,y=0)
+
+"""TextArea = Text(inFrame,width=400, height=100)
 ScrollBar = Scrollbar(inFrame)
 ScrollBar.config(command=TextArea.yview)
 TextArea.config(yscrollcommand=ScrollBar.set)
-#ScrollBar.place(x=50,7=0)
-TextArea.place(x=0,y=0)
+#ScrollBar.place(x=400,y=10)
+TextArea.place(x=0,y=0)"""
+#ScrollBar.pack(side=RIGHT, fill=Y)
 
 
 
@@ -251,15 +259,24 @@ def sintaxAnalysis(l):
 			x=tableLR[b][sim]
 			stack.append(node)
 			stack.append(x)
-	node.muestra()
-	print(node.semantico())
+	if state==True:
+		salidaTxt.insert('1.0','Sintaxis Aceptada\n')
+		tree=node.muestra()
+		treeTxt.insert(END,tree)
+		listaErrores=node.semantico()
+		if len(listaErrores)==0:
+			salidaTxt.insert(END,'Semantica Aceptada\n')
+		else:
+			salidaTxt.insert(END,'---Errores Semanticos:---\n\n')
+		for i in listaErrores:
+			salidaTxt.insert(END,'-'+i+'\n')
+	else:
+		salidaTxt.insert('1.0','Sintaxis Incorrecta\n')
+	
 	#tabla=[],[]
 	#tabla.add(2,3)
 	#print tabla
-	if state==True:
-		mensaje.set("Input Aceptado")
-	else:
-		mensaje.set("Input Incorrecto")
+
 
 
 #		-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
@@ -268,22 +285,25 @@ def analisis():
 	l.set_source(TextArea.get("1.0",END))
 	l.analysis()
 	l.get_message().remove("")
+	salidaTxt.delete('1.0',END)
+	treeTxt.delete('1.0',END)
 	#print(l.get_ids())
 	sintaxAnalysis(l)
+
 	
 	
 
 
-boton=Button(inFrame,text="Analizar", command=analisis)
+boton=Button(inputFrame,text="Analizar", command=analisis)
 
-boton.place(x=300,y=29)
+boton.place(x=400,y=0)
 
 #---------------------------------------------------------------------
 outputFrame=Frame(root)
 
 outputFrame.config( width=480, height=35, bg="#009A80") #009AF6
 
-outputFrame.place(x=10,y=230);
+outputFrame.place(x=10,y=285);
 
 outputFrame.config(bd=3,relief="ridge")
 
@@ -295,9 +315,9 @@ miLabel.place(x=0,y=0)
 
 outFrame=Frame(root)
 
-outFrame.config( width=480, height=90, bg="white") #009AF6
+outFrame.config( width=480, height=180, bg="white") #009AF6
 
-outFrame.place(x=10,y=265);
+outFrame.place(x=10,y=320);
 
 outFrame.config(bd=3,relief="ridge")
 
@@ -311,15 +331,56 @@ s.pack(side=RIGHT, fill=Y)
 
 listBox.pack(side=LEFT, fill=BOTH, expand=True)"""
 
-mensaje=StringVar()
+"""mensaje=StringVar()
 mensaje.set("")
 
-RLabel=Label(outFrame, textvariable=mensaje)
+s=Scrollbar(outFrame)
+
+RLabel=Label(outFrame,textvariable=mensaje)
 
 RLabel.config(bg="white",fg="black", font=("Consolas",12))
 
-RLabel.place(x=5,y=10)
+RLabel.place(x=5,y=10)"""
+"""salidaTxt=Text(outFrame)
 
+salidaTxt.pack(side=LEFT, expand=False, fill=BOTH)
+
+sb = Scrollbar(outFrame)
+sb.config(command=salidaTxt.yview)
+sb.pack(side=RIGHT, fill=Y)
+ 
+salidaTxt.config(yscrollcommand=sb.set)"""
+salidaTxt=ScrolledText(outFrame,undo=True)
+salidaTxt.config(width=50,height=10)
+salidaTxt.place(x=0,y=0)
+
+
+titleTree=Frame(root)
+
+titleTree.config( width=400, height=35, bg="#009A80") #009AF6
+
+titleTree.place(x=500,y=105);
+
+titleTree.config(bd=3,relief="ridge")
+
+treeLabel=Label(titleTree, text="Arbol Sintactico: ")
+
+treeLabel.config(bg="#009A80",fg="white", font=("Consolas",12))
+
+treeLabel.place(x=0,y=0)
+
+treeFrame=Frame(root)
+
+treeFrame.config( width=400, height=300, bg="white") #009AF6
+
+treeFrame.place(x=500,y=140);
+
+treeFrame.config(bd=3,relief="ridge")
+
+
+treeTxt=ScrolledText(treeFrame,undo=True)
+treeTxt.config(width=41,height=17)
+treeTxt.place(x=0,y=0)
 
 root.mainloop() 
 

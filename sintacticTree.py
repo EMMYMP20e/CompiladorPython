@@ -35,6 +35,9 @@ class TablaSimbolos(object):
 	def isInTablaVariables(self,simVar):
 		for i in self.tablaVariables:
 			if i.get_Nombre()==simVar.get_Nombre():
+				#print(i.get_Nombre(),simVar.get_Nombre())
+				
+				#print(i.get_Ambito(),simVar.get_Ambito())
 				if i.get_Ambito()==simVar.get_Ambito():
 					return True
 		return False
@@ -89,7 +92,11 @@ class Rule1(Node):
 		return self.node
 
 	def muestra(self):
-		self.node.muestra()
+		msg=""
+		msg+=self.name+'\n'
+		tabs=1
+		msg=self.node.muestra(msg,tabs)
+		return msg
 
 	def semantico(self):
 		"""tV=[]	#tabla de variables
@@ -105,8 +112,11 @@ class Rule1(Node):
 class Rule2(Node):
 	def __init__(self,pila):
 		self.name="R2"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
 	def semantico(self,tablaSim):
 		pass
 
@@ -118,9 +128,14 @@ class Rule3(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R3"
-	def muestra(self):
-		self.id2.muestra()
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
@@ -133,8 +148,13 @@ class Rule4(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R4"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
@@ -145,8 +165,13 @@ class Rule5(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R5"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
@@ -163,11 +188,22 @@ class Rule6(Node):
 		pila.pop()
 		self.tipo=pila.pop()
 		self.name="R6"
-	def muestra(self):
-		print(self.tipo,self.idn)
-		self.id1.muestra()
-		print(";")
-
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.tipo+'\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=';\n'
+		return msg
 	def semantico(self,tablaSim):
 		"""sv=SimboloVariable(tipo,idn,ambito)
 		for i in tV:
@@ -189,8 +225,11 @@ class Rule6(Node):
 class Rule7(Node):
 	def __init__(self,pila):
 		self.name="R7"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
 	def semantico(self,tablaSim):
 		pass
 
@@ -205,9 +244,19 @@ class Rule8(Node):
 		pila.pop()
 		pila.pop()		#,
 		self.name="R8"
-	def muestra(self):
-		print(",",self.idn)
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=',\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		sv=SimboloVariable(tablaSim.get_TipoAnterior(),self.idn,tablaSim.get_Ambito())
@@ -233,11 +282,26 @@ class Rule9(Node):
 		pila.pop()
 		self.tipo=pila.pop()
 		self.name="R9"
-	def muestra(self):
-		print(self.tipo,self.idn,"(")
-		self.id2.muestra()
-		print(")")
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.tipo+'\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+='(\n'
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=')\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		sf=SimboloFuncion(self.tipo,self.idn)
@@ -255,8 +319,12 @@ class Rule9(Node):
 class Rule10(Node):
 	def __init__(self,pila):
 		self.name="R10"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -270,9 +338,19 @@ class Rule11(Node):
 		pila.pop()
 		self.tipo=pila.pop()
 		self.name="R11"
-	def muestra(self):
-		print(self.tipo,self.idn)
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.tipo+'\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		sv=SimboloVariable(self.tipo,self.idn,tablaSim.get_Ambito())
@@ -286,8 +364,12 @@ class Rule11(Node):
 class Rule12(Node):
 	def __init__(self,pila):
 		self.name="R12"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -303,9 +385,22 @@ class Rule13(Node):
 		pila.pop()
 		pila.pop()		#,
 		self.name="R13"
-	def muestra(self):
-		print(",",self.tipo,self.idn)
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=',\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.tipo+'\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		sv=SimboloVariable(self.tipo,self.idn,tablaSim.get_Ambito())
@@ -325,10 +420,19 @@ class Rule14(Node):
 		pila.pop()
 		pila.pop()		#{
 		self.name="R14"
-	def muestra(self):
-		print("{")
-		self.id1.muestra()
-		print("}")
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='{\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='}\n'
+		return msg
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
@@ -337,8 +441,12 @@ class Rule14(Node):
 class Rule15(Node):
 	def __init__(self,pila):
 		self.name="R15"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -350,9 +458,15 @@ class Rule16(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R16"
-	def muestra(self):
-		self.id2.muestra()
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
@@ -363,8 +477,14 @@ class Rule17(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R17"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -374,8 +494,14 @@ class Rule18(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R18"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -383,8 +509,12 @@ class Rule18(Node):
 class Rule19(Node):
 	def __init__(self,pila):
 		self.name="R19"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -396,9 +526,15 @@ class Rule20(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R20"
-	def muestra(self):
-		self.id2.muestra()
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
@@ -415,16 +551,41 @@ class Rule21(Node):
 		pila.pop()
 		self.idn=pila.pop()
 		self.name="R21"
-	def muestra(self):
-		print(self.idn,'=')
-		self.id1.muestra()
-		print(';')
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		for i in range(tabs):
+			msg+='  '
+		msg+='=\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=';\n'
+		return msg
 
 	def semantico(self,tablaSim):
 		sv=SimboloVariable("",self.idn,tablaSim.get_Ambito())
-		if ~tablaSim.isInTablaVariables(sv):
+		if (not tablaSim.isInTablaVariables(sv)):
 			tablaSim.add_Error("Variable: "+self.idn+" No Declarada")
-		self.id1.semantico(tablaSim)
+		tipo1=tablaSim.get_TipoVariable(self.idn)
+		print(tipo1.get_Tipo())
+		tipo2=self.id1.semantico(tablaSim)
+		if tipo1.get_Tipo()!=tipo2.get_Tipo():
+			try:
+				n1=tipo1.get_Nombre()
+			except:
+				n1=tipo1.get_Ambito()
+			try:
+				n2=tipo2.get_Nombre()
+			except:
+				n2=tipo2.get_Ambito()
+			tablaSim.add_Error(n1+" y "+n2+" son incompatibles "+tipo1.get_Tipo()+","+tipo2.get_Tipo())
+
 
 class Rule22(Node):
 	def __init__(self,pila):
@@ -441,12 +602,21 @@ class Rule22(Node):
 		pila.pop()
 		pila.pop()		#if
 		self.name="R22"
-	def muestra(self):
-		print('if','(')
-		self.id3.muestra()
-		print(')')
-		self.id2.muestra()
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='if(\n'
+		msg=self.id3.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=')\n'
+		msg=self.id2.muestra(msg,tabs)
+		msg=self.id1.muestra(msg,tabs)
+		return msg
 
 	def semantico(self,tablaSim):
 		self.id3.semantico(tablaSim)
@@ -467,11 +637,21 @@ class Rule23(Node):
 		pila.pop()
 		pila.pop()		#while
 		self.name="R23"
-	def muestra(self):
-		print('while','(')
-		self.id2.muestra()
-		print(')')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='while(\n'
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=')\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
@@ -486,10 +666,20 @@ class Rule24(Node):
 		pila.pop()
 		pila.pop()		#return
 		self.name="R24"
-	def muestra(self):
-		print('return')
-		self.id1.muestra()
-		print(';')
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='return\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=';\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -500,9 +690,17 @@ class Rule25(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R25"
-	def muestra(self):
-		self.id1.muestra()
-		print(';')
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=';\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -510,8 +708,12 @@ class Rule25(Node):
 class Rule26(Node):
 	def __init__(self,pila):
 		self.name="R26"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -523,9 +725,17 @@ class Rule27(Node):
 		pila.pop()
 		pila.pop()		#else
 		self.name="R27"
-	def muestra(self):
-		print('else')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='else\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -539,18 +749,32 @@ class Rule28(Node):
 		pila.pop()
 		pila.pop()		#{
 		self.name="R28"
-	def muestra(self):
-		print('{')
-		self.id1.muestra()
-		print('}')
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='{\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='}\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
 class Rule29(Node):
 	def __init__(self,pila):
 		self.name="R29"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -560,8 +784,14 @@ class Rule30(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R30"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -569,8 +799,12 @@ class Rule30(Node):
 class Rule31(Node):
 	def __init__(self,pila):
 		self.name="R31"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -582,9 +816,15 @@ class Rule32(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R32"
-	def muestra(self):
-		self.id2.muestra()
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
@@ -593,8 +833,12 @@ class Rule32(Node):
 class Rule33(Node):
 	def __init__(self,pila):
 		self.name="R33"
-	def muestra(self):
-		pass
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		pass
 
@@ -608,10 +852,18 @@ class Rule34(Node):
 		pila.pop()
 		pila.pop()		#,
 		self.name="R34"
-	def muestra(self):
-		print(',')
-		self.id2.muestra()
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=',\n'
+		msg=self.id2.muestra(msg,tabs)
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
@@ -622,8 +874,14 @@ class Rule35(Node):
 		pila.pop()
 		id1=pila.pop()
 		self.name="R35"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 		
@@ -634,11 +892,19 @@ class Rule36(Node):
 		pila.pop()
 		self.idn=pila.pop()
 		self.name="R36"
-	def muestra(self):
-		print(self.idn)
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		sv=SimboloVariable("",self.idn,tablaSim.get_Ambito())
-		if ~tablaSim.isInTablaVariables(sv):
+		if not tablaSim.isInTablaVariables(sv):
 			tablaSim.add_Error("Variable: "+self.idn+" No Declarada")
 		return tablaSim.get_TipoVariable(self.idn)
 
@@ -649,8 +915,16 @@ class Rule37(Node):
 		pila.pop()
 		self.ent=pila.pop()
 		self.name="R37"
-	def muestra(self):
-		print(self.ent)
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.ent+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		v=SimboloVariable("int",self.ent,"")
 		return v
@@ -662,8 +936,16 @@ class Rule38(Node):
 		pila.pop()
 		self.real=pila.pop()
 		self.name="R38"
-	def muestra(self):
-		print(self.real)
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.real+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		v=SimboloVariable("float",self.real,"")
 		return v
@@ -674,8 +956,16 @@ class Rule39(Node):
 		pila.pop()
 		self.cadena=pila.pop()
 		self.name="R39"
-	def muestra(self):
-		print(self.cadena)
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.cadena+'\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		v=SimboloVariable("string",self.cadena,"")
 		return v
@@ -692,17 +982,26 @@ class Rule40(Node):
 		pila.pop()
 		self.idn=pila.pop()
 		self.name="R40"
-	def muestra(self):
-		print(self.idn)
-		print('(')
-		self.id1.muestra()
-		print(')')
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.idn+'(\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=')\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		sf=SimboloFuncion("",self.idn)
-		if ~tablaSim.isIntablaFunciones(sf):
+		if not tablaSim.isIntablaFunciones(sf):
 			tablaSim.add_Error("Funcion: "+self.idn+" No Declarada")
 		self.id1.semantico(tablaSim)
-		return tablaSim.get_TipoFuncion(sf)
+		return tablaSim.get_TipoFuncion(self.idn)
 
 
 class Rule41(Node):
@@ -710,8 +1009,14 @@ class Rule41(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R41"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -721,8 +1026,14 @@ class Rule42(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R42"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -736,10 +1047,20 @@ class Rule43(Node):
 		pila.pop()
 		pila.pop()		#(
 		self.name="R43"
-	def muestra(self):
-		print('(')
-		self.id1.muestra()
-		print(')')
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='(\n'
+		msg=self.id1.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+=')\n'
+		return msg
+
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
 
@@ -752,9 +1073,17 @@ class Rule44(Node):
 		pila.pop()
 		pila.pop()		#opSuma
 		self.name="R44"
-	def muestra(self):
-		print('opSuma')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='opSuma\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
 
@@ -766,9 +1095,17 @@ class Rule45(Node):
 		pila.pop()
 		pila.pop()		#opNot
 		self.name="R45"
-	def muestra(self):
-		print('opNot')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		for i in range(tabs):
+			msg+='  '
+		msg+='opNot\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
 
@@ -782,10 +1119,18 @@ class Rule46(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R46"
-	def muestra(self):
-		self.id2.muestra()
-		print('opMul')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='opMul\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		tipo1=self.id2.semantico(tablaSim)
 		tipo2=self.id1.semantico(tablaSim)
@@ -813,10 +1158,18 @@ class Rule47(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R47"
-	def muestra(self):
-		self.id2.muestra()
-		print('opSuma')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='opSuma\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		tipo1=self.id2.semantico(tablaSim)
 		tipo2=self.id1.semantico(tablaSim)
@@ -845,10 +1198,18 @@ class Rule48(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R48"
-	def muestra(self):
-		self.id2.muestra()
-		print('opMRelac')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='opMRelac\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		tipo1=self.id2.semantico(tablaSim)
 		tipo2=self.id1.semantico(tablaSim)
@@ -858,9 +1219,9 @@ class Rule48(Node):
 			except:
 				n1=tipo1.get_Ambito()
 			try:
-				n2=tipo1.get_Nombre()
+				n2=tipo2.get_Nombre()
 			except:
-				n2=tipo1.get_Ambito()
+				n2=tipo2.get_Ambito()
 			tablaSim.add_Error(n1+" y "+n2+" son incompatibles "+tipo1.get_Tipo()+","+tipo2.get_Tipo())
 			v=SimboloVariable("","","")
 			return v
@@ -876,22 +1237,31 @@ class Rule49(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R49"
-	def muestra(self):
-		self.id2.muestra()
-		print('opIgualdad')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='opIgualdad\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		tipo1=self.id2.semantico(tablaSim)
 		tipo2=self.id1.semantico(tablaSim)
+		print(tipo.get_Tipo(),tipo2.get_Tipo())
 		if tipo1.get_Tipo()!=tipo2.get_Tipo():
 			try:
 				n1=tipo1.get_Nombre()
 			except:
 				n1=tipo1.get_Ambito()
 			try:
-				n2=tipo1.get_Nombre()
+				n2=tipo2.get_Nombre()
 			except:
-				n2=tipo1.get_Ambito()
+				n2=tipo2.get_Ambito()
 			tablaSim.add_Error(n1+" y "+n2+" son incompatibles "+tipo1.get_Tipo()+","+tipo2.get_Tipo())
 			v=SimboloVariable("","","")
 			return v
@@ -907,10 +1277,18 @@ class Rule50(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R50"
-	def muestra(self):
-		self.id2.muestra()
-		print('opAnd')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='opAnd\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		tipo1=self.id2.semantico(tablaSim)
 		tipo2=self.id1.semantico(tablaSim)
@@ -920,9 +1298,9 @@ class Rule50(Node):
 			except:
 				n1=tipo1.get_Ambito()
 			try:
-				n2=tipo1.get_Nombre()
+				n2=tipo2.get_Nombre()
 			except:
-				n2=tipo1.get_Ambito()
+				n2=tipo2.get_Ambito()
 			tablaSim.add_Error(n1+" y "+n2+" son incompatibles "+tipo1.get_Tipo()+","+tipo2.get_Tipo())
 			v=SimboloVariable("","","")
 			return v
@@ -938,10 +1316,18 @@ class Rule51(Node):
 		pila.pop()
 		self.id2=pila.pop()
 		self.name="R51"
-	def muestra(self):
-		self.id2.muestra()
-		print('opOr')
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id2.muestra(msg,tabs)
+		for i in range(tabs):
+			msg+='  '
+		msg+='opOr\n'
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
 		tipo1=self.id2.semantico(tablaSim)
 		tipo2=self.id1.semantico(tablaSim)
@@ -951,9 +1337,9 @@ class Rule51(Node):
 			except:
 				n1=tipo1.get_Ambito()
 			try:
-				n2=tipo1.get_Nombre()
+				n2=tipo2.get_Nombre()
 			except:
-				n2=tipo1.get_Ambito()
+				n2=tipo2.get_Ambito()
 			tablaSim.add_Error(n1+" y "+n2+" son incompatibles "+tipo1.get_Tipo()+","+tipo2.get_Tipo())
 			v=SimboloVariable("","","")
 			return v
@@ -965,7 +1351,13 @@ class Rule52(Node):
 		pila.pop()
 		self.id1=pila.pop()
 		self.name="R52"
-	def muestra(self):
-		self.id1.muestra()
+	def muestra(self,msg,tabs):
+		for i in range(tabs):
+			msg+='  '
+		msg+=self.name+'\n'
+		tabs+=1
+		msg=self.id1.muestra(msg,tabs)
+		return msg
+
 	def semantico(self,tablaSim):
-		self.id1.semantico(tablaSim)
+		return self.id1.semantico(tablaSim)
