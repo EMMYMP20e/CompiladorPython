@@ -40,6 +40,8 @@ class TablaSimbolos(object):
 				#print(i.get_Ambito(),simVar.get_Ambito())
 				if i.get_Ambito()==simVar.get_Ambito():
 					return True
+				if i.get_Ambito()=="" and simVar.get_Ambito()!="":
+					return True
 		return False
 	def isIntablaFunciones(self,simFun):
 		for i in self.tablaFunciones:
@@ -70,6 +72,11 @@ class TablaSimbolos(object):
 		return v
 	def get_ListaErrores(self):
 		return self.listaErrores
+	def printTables(self):
+		for i in self.tablaFunciones:
+			print(i.get_Tipo(),i.get_Ambito())
+		for i in self.tablaVariables:
+			print(i.get_Ambito(),i.get_Tipo(),i.get_Nombre())
 
 
 
@@ -105,6 +112,7 @@ class Rule1(Node):
 		self.node.semantico(tF,tV,ambito)#pasar tabla por parametro en cada uno"""
 		tablaSim=TablaSimbolos()
 		self.node.semantico(tablaSim)
+		tablaSim.printTables()
 		return tablaSim.get_ListaErrores()
 
 
@@ -114,7 +122,7 @@ class Rule2(Node):
 		self.name="R2"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 	def semantico(self,tablaSim):
@@ -130,7 +138,7 @@ class Rule3(Node):
 		self.name="R3"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
@@ -150,7 +158,7 @@ class Rule4(Node):
 		self.name="R4"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -167,7 +175,7 @@ class Rule5(Node):
 		self.name="R5"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -190,18 +198,18 @@ class Rule6(Node):
 		self.name="R6"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.tipo+'\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=';\n'
 		return msg
 	def semantico(self,tablaSim):
@@ -227,7 +235,7 @@ class Rule7(Node):
 		self.name="R7"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 	def semantico(self,tablaSim):
@@ -246,14 +254,14 @@ class Rule8(Node):
 		self.name="R8"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=',\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -284,21 +292,21 @@ class Rule9(Node):
 		self.name="R9"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.tipo+'\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='(\n'
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=')\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -321,7 +329,7 @@ class Rule10(Node):
 		self.name="R10"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -340,14 +348,14 @@ class Rule11(Node):
 		self.name="R11"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.tipo+'\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -366,7 +374,7 @@ class Rule12(Node):
 		self.name="R12"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -387,17 +395,17 @@ class Rule13(Node):
 		self.name="R13"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=',\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.tipo+'\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -422,15 +430,15 @@ class Rule14(Node):
 		self.name="R14"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='{\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='}\n'
 		return msg
 
@@ -443,7 +451,7 @@ class Rule15(Node):
 		self.name="R15"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -460,7 +468,7 @@ class Rule16(Node):
 		self.name="R16"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
@@ -479,7 +487,7 @@ class Rule17(Node):
 		self.name="R17"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -496,7 +504,7 @@ class Rule18(Node):
 		self.name="R18"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -511,7 +519,7 @@ class Rule19(Node):
 		self.name="R19"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -528,7 +536,7 @@ class Rule20(Node):
 		self.name="R20"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
@@ -553,18 +561,18 @@ class Rule21(Node):
 		self.name="R21"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='=\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=';\n'
 		return msg
 
@@ -604,15 +612,15 @@ class Rule22(Node):
 		self.name="R22"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='if(\n'
 		msg=self.id3.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=')\n'
 		msg=self.id2.muestra(msg,tabs)
 		msg=self.id1.muestra(msg,tabs)
@@ -639,15 +647,15 @@ class Rule23(Node):
 		self.name="R23"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='while(\n'
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=')\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -668,15 +676,15 @@ class Rule24(Node):
 		self.name="R24"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='return\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=';\n'
 		return msg
 
@@ -692,12 +700,12 @@ class Rule25(Node):
 		self.name="R25"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=';\n'
 		return msg
 
@@ -710,7 +718,7 @@ class Rule26(Node):
 		self.name="R26"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -727,11 +735,11 @@ class Rule27(Node):
 		self.name="R27"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='else\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -751,15 +759,15 @@ class Rule28(Node):
 		self.name="R28"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='{\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='}\n'
 		return msg
 
@@ -771,7 +779,7 @@ class Rule29(Node):
 		self.name="R29"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -786,7 +794,7 @@ class Rule30(Node):
 		self.name="R30"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -801,7 +809,7 @@ class Rule31(Node):
 		self.name="R31"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -818,7 +826,7 @@ class Rule32(Node):
 		self.name="R32"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
@@ -835,7 +843,7 @@ class Rule33(Node):
 		self.name="R33"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		return msg
 
@@ -854,11 +862,11 @@ class Rule34(Node):
 		self.name="R34"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=',\n'
 		msg=self.id2.muestra(msg,tabs)
 		msg=self.id1.muestra(msg,tabs)
@@ -872,18 +880,18 @@ class Rule34(Node):
 class Rule35(Node):
 	def __init__(self,pila):
 		pila.pop()
-		id1=pila.pop()
+		self.id1=pila.pop()
 		self.name="R35"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
 		return msg
 
 	def semantico(self,tablaSim):
-		self.id1.semantico(tablaSim)
+		return self.id1.semantico(tablaSim)
 		
 
 
@@ -894,11 +902,11 @@ class Rule36(Node):
 		self.name="R36"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'\n'
 		return msg
 
@@ -917,11 +925,11 @@ class Rule37(Node):
 		self.name="R37"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.ent+'\n'
 		return msg
 
@@ -938,11 +946,11 @@ class Rule38(Node):
 		self.name="R38"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.real+'\n'
 		return msg
 
@@ -958,11 +966,11 @@ class Rule39(Node):
 		self.name="R39"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.cadena+'\n'
 		return msg
 
@@ -984,15 +992,15 @@ class Rule40(Node):
 		self.name="R40"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.idn+'(\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=')\n'
 		return msg
 
@@ -1011,7 +1019,7 @@ class Rule41(Node):
 		self.name="R41"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -1028,7 +1036,7 @@ class Rule42(Node):
 		self.name="R42"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
@@ -1049,20 +1057,20 @@ class Rule43(Node):
 		self.name="R43"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='(\n'
 		msg=self.id1.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=')\n'
 		return msg
 
 	def semantico(self,tablaSim):
-		self.id1.semantico(tablaSim)
+		return self.id1.semantico(tablaSim)
 
 
 
@@ -1075,11 +1083,11 @@ class Rule44(Node):
 		self.name="R44"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opSuma\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1097,11 +1105,11 @@ class Rule45(Node):
 		self.name="R45"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opNot\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1121,12 +1129,12 @@ class Rule46(Node):
 		self.name="R46"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opMul\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1160,12 +1168,12 @@ class Rule47(Node):
 		self.name="R47"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opSuma\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1200,12 +1208,12 @@ class Rule48(Node):
 		self.name="R48"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opMRelac\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1239,12 +1247,12 @@ class Rule49(Node):
 		self.name="R49"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opIgualdad\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1279,12 +1287,12 @@ class Rule50(Node):
 		self.name="R50"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opAnd\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1318,12 +1326,12 @@ class Rule51(Node):
 		self.name="R51"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id2.muestra(msg,tabs)
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+='opOr\n'
 		msg=self.id1.muestra(msg,tabs)
 		return msg
@@ -1353,7 +1361,7 @@ class Rule52(Node):
 		self.name="R52"
 	def muestra(self,msg,tabs):
 		for i in range(tabs):
-			msg+='  '
+			msg+='  |'
 		msg+=self.name+'\n'
 		tabs+=1
 		msg=self.id1.muestra(msg,tabs)
