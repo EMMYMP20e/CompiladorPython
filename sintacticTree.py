@@ -115,6 +115,11 @@ class Rule1(Node):
 		tablaSim.printTables()
 		return tablaSim.get_ListaErrores()
 
+	def codeGen(self):
+		code=""
+		self.node.codeGen(code)
+		return code
+
 
 
 class Rule2(Node):
@@ -126,6 +131,8 @@ class Rule2(Node):
 		msg+=self.name+'\n'
 		return msg
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -148,6 +155,10 @@ class Rule3(Node):
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+
+	def codeGen(self,code):
+		self.id1.codeGen(code)
+		self.id2.codeGen(code)
 		
 
 
@@ -166,6 +177,8 @@ class Rule4(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule5(Node):
@@ -183,6 +196,8 @@ class Rule5(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule6(Node):
@@ -227,6 +242,12 @@ class Rule6(Node):
 			tablaSim.add_tablaVariables(sv)
 		tablaSim.set_TipoAnterior(self.tipo)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		if self.tipo=="int":
+			code+=self.idn+": db 0\n"
+		else:
+			code+=self.idn+": dw 0\n"
+		self.id1.codeGen(code)
 
 
 
@@ -239,6 +260,8 @@ class Rule7(Node):
 		msg+=self.name+'\n'
 		return msg
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -267,12 +290,18 @@ class Rule8(Node):
 		return msg
 
 	def semantico(self,tablaSim):
-		sv=SimboloVariable(tablaSim.get_TipoAnterior(),self.idn,tablaSim.get_Ambito())
-		if tablaSim.isInTablaVariables(sv):
+		self.sv=SimboloVariable(tablaSim.get_TipoAnterior(),self.idn,tablaSim.get_Ambito())
+		if tablaSim.isInTablaVariables(self.sv):
 			tablaSim.add_Error("Variable: "+self.idn+" redefinida")
 		else:
-			tablaSim.add_tablaVariables(sv)
+			tablaSim.add_tablaVariables(self.sv)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		if self.sv.get_Tipo()=="int":
+			code+=self.idn+" db 0\n"
+		else:
+			code+=self.idn+" dw 0\n"
+		self.id1.codeGen(code)
 
 
 class Rule9(Node):
@@ -321,7 +350,9 @@ class Rule9(Node):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
 		tablaSim.cambia_Ambito("")
-		
+	def codeGen(self,code):
+		self.id1.codeGen(code)
+		self.id2.codeGen(code)
 
 
 class Rule10(Node):
@@ -334,6 +365,8 @@ class Rule10(Node):
 		return msg
 
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -367,6 +400,8 @@ class Rule11(Node):
 		else:
 			tablaSim.add_tablaVariables(sv)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule12(Node):
@@ -379,6 +414,8 @@ class Rule12(Node):
 		return msg
 
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -417,6 +454,8 @@ class Rule13(Node):
 		else:
 			tablaSim.add_tablaVariables(sv)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule14(Node):
