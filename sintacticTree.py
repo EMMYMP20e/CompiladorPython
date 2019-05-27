@@ -77,6 +77,15 @@ class TablaSimbolos(object):
 			print(i.get_Tipo(),i.get_Ambito())
 		for i in self.tablaVariables:
 			print(i.get_Ambito(),i.get_Tipo(),i.get_Nombre())
+	def get_ListaVariables(self):
+		return self.tablaVariables
+class CodigoGenerado(object):
+	def __init__(self):
+		self.lines=[]
+	def addLine(self,line):
+		self.lines.append(line)
+	def get_Codigo(self):
+		return self.lines
 
 
 
@@ -113,10 +122,10 @@ class Rule1(Node):
 		tablaSim=TablaSimbolos()
 		self.node.semantico(tablaSim)
 		tablaSim.printTables()
-		return tablaSim.get_ListaErrores()
+		return tablaSim
 
 	def codeGen(self):
-		code=""
+		code=CodigoGenerado()
 		self.node.codeGen(code)
 		return code
 
@@ -157,8 +166,8 @@ class Rule3(Node):
 		self.id1.semantico(tablaSim)
 
 	def codeGen(self,code):
-		self.id1.codeGen(code)
 		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 		
 
 
@@ -243,10 +252,6 @@ class Rule6(Node):
 		tablaSim.set_TipoAnterior(self.tipo)
 		self.id1.semantico(tablaSim)
 	def codeGen(self,code):
-		if self.tipo=="int":
-			code+=self.idn+": db 0\n"
-		else:
-			code+=self.idn+": dw 0\n"
 		self.id1.codeGen(code)
 
 
@@ -297,10 +302,6 @@ class Rule8(Node):
 			tablaSim.add_tablaVariables(self.sv)
 		self.id1.semantico(tablaSim)
 	def codeGen(self,code):
-		if self.sv.get_Tipo()=="int":
-			code+=self.idn+" db 0\n"
-		else:
-			code+=self.idn+" dw 0\n"
 		self.id1.codeGen(code)
 
 
@@ -351,8 +352,8 @@ class Rule9(Node):
 		self.id1.semantico(tablaSim)
 		tablaSim.cambia_Ambito("")
 	def codeGen(self,code):
-		self.id1.codeGen(code)
 		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule10(Node):
@@ -483,6 +484,8 @@ class Rule14(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule15(Node):
@@ -496,6 +499,9 @@ class Rule15(Node):
 
 	def semantico(self,tablaSim):
 		pass
+	def codeGen(self,code):
+		pass
+
 
 
 class Rule16(Node):
@@ -517,6 +523,9 @@ class Rule16(Node):
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule17(Node):
@@ -534,6 +543,8 @@ class Rule17(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule18(Node):
@@ -551,6 +562,8 @@ class Rule18(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule19(Node):
@@ -563,6 +576,8 @@ class Rule19(Node):
 		return msg
 
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -585,6 +600,9 @@ class Rule20(Node):
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule21(Node):
@@ -632,7 +650,9 @@ class Rule21(Node):
 			except:
 				n2=tipo2.get_Ambito()
 			tablaSim.add_Error(n1+" y "+n2+" son incompatibles "+tipo1.get_Tipo()+","+tipo2.get_Tipo())
-
+	def codeGen(self,code):
+		num=self.id1.codeGen(code)
+		code.addLine("mov DWORD ["+self.idn+"],"+num+"\n")
 
 class Rule22(Node):
 	def __init__(self,pila):
@@ -669,6 +689,10 @@ class Rule22(Node):
 		self.id3.semantico(tablaSim)
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id3.codeGen(code)
+		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule23(Node):
@@ -702,6 +726,9 @@ class Rule23(Node):
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule24(Node):
@@ -729,6 +756,8 @@ class Rule24(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 class Rule25(Node):
 	def __init__(self,pila):
@@ -750,6 +779,8 @@ class Rule25(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule26(Node):
@@ -762,6 +793,8 @@ class Rule26(Node):
 		return msg
 
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -785,7 +818,8 @@ class Rule27(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
-
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 class Rule28(Node):
 	def __init__(self,pila):
@@ -812,6 +846,8 @@ class Rule28(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 class Rule29(Node):
 	def __init__(self,pila):
@@ -824,6 +860,9 @@ class Rule29(Node):
 
 	def semantico(self,tablaSim):
 		pass
+	def codeGen(self,code):
+		pass
+
 
 
 class Rule30(Node):
@@ -841,6 +880,8 @@ class Rule30(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule31(Node):
@@ -853,6 +894,8 @@ class Rule31(Node):
 		return msg
 
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -875,6 +918,9 @@ class Rule32(Node):
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule33(Node):
@@ -887,6 +933,8 @@ class Rule33(Node):
 		return msg
 
 	def semantico(self,tablaSim):
+		pass
+	def codeGen(self,code):
 		pass
 
 
@@ -914,6 +962,9 @@ class Rule34(Node):
 	def semantico(self,tablaSim):
 		self.id2.semantico(tablaSim)
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id2.codeGen(code)
+		self.id1.codeGen(code)
 
 
 class Rule35(Node):
@@ -931,6 +982,8 @@ class Rule35(Node):
 
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 		
 
 
@@ -954,6 +1007,8 @@ class Rule36(Node):
 		if not tablaSim.isInTablaVariables(sv):
 			tablaSim.add_Error("Variable: "+self.idn+" No Declarada")
 		return tablaSim.get_TipoVariable(self.idn)
+	def codeGen(self,code):
+		return "DWORD ["+self.idn+"]"
 
 
 
@@ -975,6 +1030,8 @@ class Rule37(Node):
 	def semantico(self,tablaSim):
 		v=SimboloVariable("int",self.ent,"")
 		return v
+	def codeGen(self,code):
+		return self.ent
 		
 
 
@@ -996,6 +1053,8 @@ class Rule38(Node):
 	def semantico(self,tablaSim):
 		v=SimboloVariable("float",self.real,"")
 		return v
+	def codeGen(self,code):
+		return self.real
 
 
 class Rule39(Node):
@@ -1016,6 +1075,8 @@ class Rule39(Node):
 	def semantico(self,tablaSim):
 		v=SimboloVariable("string",self.cadena,"")
 		return v
+	def codeGen(self,code):
+		pass
 
 
 class Rule40(Node):
@@ -1049,6 +1110,8 @@ class Rule40(Node):
 			tablaSim.add_Error("Funcion: "+self.idn+" No Declarada")
 		self.id1.semantico(tablaSim)
 		return tablaSim.get_TipoFuncion(self.idn)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule41(Node):
@@ -1066,6 +1129,8 @@ class Rule41(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule42(Node):
@@ -1083,6 +1148,8 @@ class Rule42(Node):
 
 	def semantico(self,tablaSim):
 		self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule43(Node):
@@ -1110,6 +1177,8 @@ class Rule43(Node):
 
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 
@@ -1133,6 +1202,8 @@ class Rule44(Node):
 
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		return self.id1.codeGen(code)
 
 
 class Rule45(Node):
@@ -1155,6 +1226,8 @@ class Rule45(Node):
 
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		self.id1.codeGen(code)
 
 
 class Rule46(Node):
@@ -1233,6 +1306,13 @@ class Rule47(Node):
 			v=SimboloVariable("","","")
 			return v
 		return tipo1
+	def codeGen(self,code):
+		dato1=self.id2.codeGen(code)
+		dato2=self.id1.codeGen(code)
+		code.addLine("mov eax,"+dato1+"\n")
+		code.addLine("mov ebx,"+dato2+"\n")
+		code.addLine("add eax,ebx"+"\n")
+		return "eax"
 
 
 
@@ -1408,3 +1488,5 @@ class Rule52(Node):
 
 	def semantico(self,tablaSim):
 		return self.id1.semantico(tablaSim)
+	def codeGen(self,code):
+		return self.id1.codeGen(code)

@@ -264,16 +264,36 @@ def sintaxAnalysis(l):
 		salidaTxt.insert('1.0','Sintaxis Aceptada\n')
 		tree=node.muestra()
 		treeTxt.insert(END,tree)
-		listaErrores=node.semantico()
+		lista=node.semantico()
+		listaErrores=lista.get_ListaErrores()
 		if len(listaErrores)==0:
 			salidaTxt.insert(END,'Semantica Aceptada\n')
 			#cmd="cmd"
 			#subprocess.Popen(cmd)
-			doc="global _main\nextern _printf\nsection .text\n\n_main:\npush DWORD [g_i]\npush message\ncall _printf\nadd esp,8\nret\n\nmessage:\ndb 'hello world %d', 10, 0\ng_i: dd 10"
+			for i in range(0,10):
+				print('\n')
+			doc="global _main\nextern _printf\nsection .bss\n"
+			for n in lista.get_ListaVariables():
+				doc+=n.get_Nombre()+": dd 0\n"
+			doc+="\nsection .text\n\n_main:\n"
+			cds=node.codeGen().get_Codigo()
+			for i in cds:
+				doc+=i
+			cont=0
+			for n in lista.get_ListaVariables():
+				doc+="push DWORD ["+n.get_Nombre()+"]\n"
+				cont+=1
+			doc+="\npush message\ncall _printf\nadd esp,"
+			doc+=str(((cont*4)+4))+"\n"
+			doc+="ret\n\nmessage:\ndb '"
+			variables=lista.get_ListaVariables()
+			variables.reverse()
+			for i in variables:
+				doc+=i.get_Nombre()+": %d "
+			doc+="', 10,0"
 			fileAsm=open("C:\\MinGW\\bin\\Codes\\test.asm","w")
 			fileAsm.write(doc)
 			fileAsm.close()
-			os.system("cls")
 			os.system('cd C:\\MinGW\\bin\\Codes & nasm -fwin32 test.asm & gcc test.obj -o test.exe & C:\\MinGW\\bin\\Codes\\test.exe')
 			#os.system('nasm -fwin32 test.asm')
 			#os.system('gcc test.obj -o test.exe')

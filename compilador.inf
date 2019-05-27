@@ -76,3 +76,4 @@ R49 <Expresion> ::= <Expresion> opIgualdad <Expresion>
 R50 <Expresion> ::= <Expresion> opAnd <Expresion> 
 R51 <Expresion> ::= <Expresion> opOr <Expresion> 
 R52 <Expresion> ::= <Termino> 
+
