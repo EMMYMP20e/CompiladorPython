@@ -291,13 +291,12 @@ def sintaxAnalysis(l):
 			for i in variables:
 				doc+=i.get_Nombre()+": %d "
 			doc+="', 10,0"
-			fileAsm=open("C:\\MinGW\\bin\\Codes\\test.asm","w")
+			#fileAsm=open("C:\\MinGW\\bin\\Codes\\test.asm","w")
+			fileAsm=open("C:\\test.asm","w")
 			fileAsm.write(doc)
 			fileAsm.close()
-			os.system('cd C:\\MinGW\\bin\\Codes & nasm -fwin32 test.asm & gcc test.obj -o test.exe & C:\\MinGW\\bin\\Codes\\test.exe')
-			#os.system('nasm -fwin32 test.asm')
-			#os.system('gcc test.obj -o test.exe')
-			#os.system('C:\\MinGW\\bin\\Codes\\test.exe')
+			#os.system('cd C:\\MinGW\\bin\\Codes & nasm -fwin32 test.asm & gcc test.obj -o test.exe & C:\\MinGW\\bin\\Codes\\test.exe')
+			os.system('cd C:\\ & nasm -fwin32 test.asm & gcc test.obj -o test.exe & C:\\test.exe')
 		else:
 			salidaTxt.insert(END,'---Errores Semanticos:---\n\n')
 		for i in listaErrores:
