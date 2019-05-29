@@ -1,6 +1,11 @@
 # CompiladorPython
 Compilador en Python para Seminario de Traductores de Lenguaje 2
 
+Alumno: Emmanuel Méndez Pérez
+
+Sección: D02
+Martes 1800-2155
+
 El programa fue desarrollado en Sublime Text 3
 
 Para poder realizar la generación de código el programa escribe el archivo
